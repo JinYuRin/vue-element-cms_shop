@@ -46,16 +46,19 @@ function createRoute(arr) {
         // component: () => import("../../views/layout.vue"),
         // component: () => "layout",
         // 对routes每个元素的component进行替换,注意最后一个重定向的元素是没有component属性的
+        // 得注意可能不存在component但存在children的情况????
         if (!item.component) {
             return
         } else {
+            // 直接执行以下方法会引起递归调用栈的爆炸
+            // item.component = () => import(`../../views/${item.component()}.vue`)
             let component = item.component()
             // console.log("替换前的component函数返回值", component);
             // console.log("替换后的component函数参数", `../../views/${component}.vue`);
             item.component = () => import(`../../views/${component}.vue`)
         }
         // 如果还有子路由数组，继续递归调用createRoute(arr),由于目录是有限的，自然会停止递归
-        if (!item.children) {
+        if (!item.children || item.children.length === 0) {
             return
         } else {
             createRoute(item.children)
