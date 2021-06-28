@@ -14,7 +14,8 @@ export default {
 
   computed: {},
 
-  mounted: {},
+// 空函数mounted引起警报
+  // mounted: {},
 
   methods: {}
 }

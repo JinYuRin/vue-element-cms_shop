@@ -5,20 +5,16 @@
 
 <script>
 export default {
-  data () {
-    return {
-    };
+  data() {
+    return {};
   },
 
   components: {},
 
   computed: {},
 
-  mounted: {},
-
-  methods: {}
-}
-
+  methods: {},
+};
 </script>
 <style scoped>
 </style>
