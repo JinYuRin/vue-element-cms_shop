@@ -1,8 +1,8 @@
 <template>
   <div>
     <router-view></router-view>
-    <el-button>123</el-button>
-    <div>
+    <!-- <el-button>123</el-button> -->
+    <!-- <div>
       <div class="card">
         <div class="card-header">头部</div>
         <div class="card-body">身体</div>
@@ -10,17 +10,17 @@
       </div>
       <div class="alert alert-primary p-2" role="alert">
         A simple primary alert—check it out!
-      </div>
-      <!-- 同时使用同一个事件回调函数和model -->
-      <!-- <el-radio @change="change" v-model="radio" label="1">备选项</el-radio>
+      </div> -->
+    <!-- 同时使用同一个事件回调函数和model -->
+    <!-- <el-radio @change="change" v-model="radio" label="1">备选项</el-radio>
       <el-radio @change="change" v-model="radio" label="2">备选项</el-radio> -->
 
-      <!-- 或者使用el-radio-group -->
-      <el-radio-group v-model="radio" @change="change" size="mini">
+    <!-- 或者使用el-radio-group -->
+    <!-- <el-radio-group v-model="radio" @change="change" size="mini">
         <el-radio-button border label="1">备选项1</el-radio-button>
         <el-radio-button border label="2">备选项2</el-radio-button>
       </el-radio-group>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -30,13 +30,13 @@ export default {
   components: {},
   data() {
     return {
-      radio: "2", //单选选项的label值，会自动查找并得到选中状态，但是同套单选必须绑定同个v-model
+      // radio: "2", //单选选项的label值，会自动查找并得到选中状态，但是同套单选必须绑定同个v-model
     };
   },
   methods: {
-    change() {
-      console.log("当前选择的lable是", this.radio);
-    },
+    // change() {
+    //   console.log("当前选择的lable是", this.radio);
+    // },
   },
 };
 </script>

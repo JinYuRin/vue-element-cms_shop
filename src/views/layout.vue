@@ -1,7 +1,7 @@
 <!--  -->
 <template>
 <div>
-  <div>朱布局</div>
+  <div>主布局</div>
   <router-view></router-view>
 </div>
 </template>
