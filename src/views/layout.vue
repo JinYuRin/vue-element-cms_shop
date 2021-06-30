@@ -17,19 +17,19 @@
         <div class="d-flex justify-content-between align-items-center">
           <h3 class="text-white m-0">UNI-ADMIN</h3>
           <el-menu
-            :default-active="activeIndex2"
-            class="el-menu-demo"
+            :default-active="activeHeader"
             mode="horizontal"
             @select="handleSelect"
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b"
           >
-            <el-menu-item index="1">首页</el-menu-item>
-            <el-menu-item index="2">商品</el-menu-item>
-            <el-menu-item index="3">订单</el-menu-item>
-            <el-menu-item index="4">会员</el-menu-item>
-            <el-menu-item index="5">设置</el-menu-item>
+            <el-menu-item
+              v-for="(menu, index) in headerMenu"
+              :key="index"
+              :index="index"
+              >{{ menu }}</el-menu-item
+            >
             <el-submenu index="100">
               <template slot="title">
                 <el-avatar
@@ -42,10 +42,14 @@
                     src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
                   />
                 </el-avatar>
-                Tencent
+                {{ userMenu.name }}
               </template>
-              <el-menu-item index="100-1">修改</el-menu-item>
-              <el-menu-item index="100-2">退出</el-menu-item>
+              <el-menu-item
+                v-for="(menu, index) in userMenu.subMenu"
+                :key="index"
+                :index="menu.index"
+                >{{ menu.title }}</el-menu-item
+              >
             </el-submenu>
           </el-menu>
         </div>
@@ -55,35 +59,24 @@
              导致这个元素还有60px在底下隐藏了看不到，所以加上padding-bottom: 60px -->
         <el-aside width="200px">
           <el-menu
-            default-active="1"
-            class="el-menu-vertical-demo"
+            :default-active="activeAside"
             @open="handleOpen"
             @close="handleClose"
           >
-            <el-menu-item index="1">
+            <el-menu-item
+              v-for="(menu, index) in asideMenu[activeHeader]"
+              :key="index"
+              :index="index"
+            >
               <i class="el-icon-menu"></i>
-              <span slot="title">后台首页</span>
-            </el-menu-item>
-            <el-menu-item index="2">
-              <i class="el-icon-menu"></i>
-              <span slot="title">相册管理</span>
-            </el-menu-item>
-            <el-menu-item index="3">
-              <i class="el-icon-document"></i>
-              <span slot="title">商品列表</span>
-            </el-menu-item>
-            <el-menu-item index="4">
-              <i class="el-icon-setting"></i>
-              <span slot="title">商品规格</span>
+              <span slot="title">{{ menu }}</span>
             </el-menu-item>
           </el-menu>
           <!-- 高度太高，而且已经使用了hidden，所以隐藏看不到 -->
           <!-- <li v-for="i in 100" :key="i">{{ i }}</li> -->
         </el-aside>
         <el-main>
-          <!-- <div>主布局</div> -->
           <router-view></router-view>
-          <!-- <li v-for="i in 100" :key="i">{{ i }}</li> -->
         </el-main>
       </el-container>
     </el-container>
@@ -92,9 +85,42 @@
 
 <script>
 export default {
+  // 引入一个vue混入组件，可以查文档
+  // mixins:[],
   data() {
     return {
-      activeIndex2: "1",
+      // 这个结构还需要重新组织，不仅要记录顶部导航的激活index还必须带有每个左侧导航的激活index
+      activeHeader: 0,
+      headerMenu: ["首页", "商品", "订单", "会员", "设置"],
+      activeAside: 0,
+      asideMenu: [
+        ["后台首页", "相册管理"],
+        [
+          "商品列表",
+          "分类列表",
+          "商品规格",
+          "商品类型",
+          "商品评论",
+          "优惠券管理",
+        ],
+        ["订单管理", "发票管理"],
+        ["会员列表", "会员等级"],
+        [
+          "基础设置",
+          "物流设置",
+          "管理员管理",
+          "交易设置",
+          "公告管理",
+          "app首页设置",
+        ],
+      ],
+      userMenu: {
+        name: "Tencent",
+        subMenu: [
+          { title: "修改", index: "100-1" },
+          { title: "退出", index: "100-2" },
+        ],
+      },
     };
   },
 
@@ -107,6 +133,7 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+      this.activeHeader = key;
     },
   },
 };
