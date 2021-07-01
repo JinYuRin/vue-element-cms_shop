@@ -15,29 +15,25 @@
     >
       <el-header style="background-color: #545c64">
         <div class="d-flex justify-content-between align-items-center">
-          <h3 class="text-white m-0">UNI-ADMIN</h3>
+          <!-- 因为$config.logo也是Vue对象里的属性，可以用this直接指向的 -->
+          <h3 class="text-white m-0">{{ $config.logo }}</h3>
           <el-menu
-            :default-active="activeHeader"
+            :default-active="activeHeader.toString()"
             mode="horizontal"
-            @select="handleSelect"
+            @select="selectHeaderMenus"
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b"
           >
             <el-menu-item
-              v-for="(menu, index) in headerMenu"
+              v-for="(menu, index) in $config.Menus.headerMenus"
               :key="index"
-              :index="index"
-              >{{ menu }}</el-menu-item
+              :index="index.toString()"
+              >{{ menu.name }}</el-menu-item
             >
             <el-submenu index="100">
               <template slot="title">
-                <el-avatar
-                  class="mr-1"
-                  :size="30"
-                  src="https://empty"
-                  @error="errorHandler"
-                >
+                <el-avatar class="mr-1" :size="30" src="https://empty">
                   <img
                     src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
                   />
@@ -45,7 +41,7 @@
                 {{ userMenu.name }}
               </template>
               <el-menu-item
-                v-for="(menu, index) in userMenu.subMenu"
+                v-for="(menu, index) in userMenu.subMenus"
                 :key="index"
                 :index="menu.index"
                 >{{ menu.title }}</el-menu-item
@@ -59,14 +55,13 @@
              导致这个元素还有60px在底下隐藏了看不到，所以加上padding-bottom: 60px -->
         <el-aside width="200px">
           <el-menu
-            :default-active="activeAside"
-            @open="handleOpen"
-            @close="handleClose"
+            :default-active="activeAside.toString()"
+            @select="selectAsideMenus"
           >
             <el-menu-item
-              v-for="(menu, index) in asideMenu[activeHeader]"
+              v-for="(menu, index) in asideMenus"
               :key="index"
-              :index="index"
+              :index="index.toString()"
             >
               <i class="el-icon-menu"></i>
               <span slot="title">{{ menu }}</span>
@@ -85,38 +80,19 @@
 
 <script>
 export default {
+  created() {
+    // 初始化一下Menus
+    this.Menus = this.$config.Menus;
+  },
   // 引入一个vue混入组件，可以查文档
   // mixins:[],
   data() {
     return {
-      // 这个结构还需要重新组织，不仅要记录顶部导航的激活index还必须带有每个左侧导航的激活index
-      activeHeader: 0,
-      headerMenu: ["首页", "商品", "订单", "会员", "设置"],
-      activeAside: 0,
-      asideMenu: [
-        ["后台首页", "相册管理"],
-        [
-          "商品列表",
-          "分类列表",
-          "商品规格",
-          "商品类型",
-          "商品评论",
-          "优惠券管理",
-        ],
-        ["订单管理", "发票管理"],
-        ["会员列表", "会员等级"],
-        [
-          "基础设置",
-          "物流设置",
-          "管理员管理",
-          "交易设置",
-          "公告管理",
-          "app首页设置",
-        ],
-      ],
+      // logo: this.$config.logo,
+      Menus: {},
       userMenu: {
         name: "Tencent",
-        subMenu: [
+        subMenus: [
           { title: "修改", index: "100-1" },
           { title: "退出", index: "100-2" },
         ],
@@ -126,14 +102,40 @@ export default {
 
   components: {},
 
-  computed: {},
+  computed: {
+    // 利用计算属性解决层级过多的问题
+    activeHeader() {
+      // 获取activeHeader
+      return this.Menus.activeHeader;
+    },
+    // 同时使用getset
+    // 计算属性之间不能直接用this使用啊
+    activeAside: {
+      // 获取activeAside
+      get() {
+        return this.Menus.headerMenus[this.Menus.activeHeader].activeAside;
+      },
+      // set进一个值然后丢给activeAside
+      set(val) {
+        this.Menus.headerMenus[this.Menus.activeHeader].activeAside = val;
+      },
+    },
+    // 获取当前的的左侧导航
+    asideMenus() {
+      return this.Menus.headerMenus[this.Menus.activeHeader].asideMenus;
+    },
+  },
 
   // mounted: {},
 
   methods: {
-    handleSelect(key, keyPath) {
+    selectHeaderMenus(key, keyPath) {
       console.log(key, keyPath);
-      this.activeHeader = key;
+      this.$config.Menus.activeHeader = key;
+    },
+    selectAsideMenus(key, keyPath) {
+      console.log(key, keyPath);
+      this.activeAside = key;
     },
   },
 };

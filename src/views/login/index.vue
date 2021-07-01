@@ -10,7 +10,7 @@
       <div class="col-12 col-sm-9 col-md-7 col-lg-5 m-auto pt-5">
         <!-- <div>登录页面</div> -->
         <div class="card text-center mt-5">
-          <h3 class="card-header text-secondary">UNI-ADMIN</h3>
+          <h3 class="card-header text-secondary">{{ $config.logo }}</h3>
           <div class="card-body">
             <el-form ref="loginForm" status-icon :rules="rules" :model="form">
               <!-- rules验证规则添加后还要 prop="username"-->
