@@ -71,11 +71,11 @@
           <!-- 高度太高，而且已经使用了hidden，所以隐藏看不到 -->
           <!-- <li v-for="i in 100" :key="i">{{ i }}</li> -->
         </el-aside>
-        <el-main>
+        <el-main class="bg-light">
           <!-- 考虑使用面包屑还是使用tabs标签 -->
           <div
             v-if="$route.name !== 'index'"
-            class="border-bottom p-3 mb-2"
+            class="border-bottom p-3 mb-2 bg-white"
             style="margin: -20px"
           >
             <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -89,6 +89,21 @@
             </el-breadcrumb>
           </div>
           <router-view></router-view>
+          <el-backtop target=".el-main" :bottom="100">
+            <div
+              style="
+                height: 100%;
+                width: 100%;
+                background-color: #f2f5f6;
+                box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+                text-align: center;
+                line-height: 40px;
+                color: #1989fa;
+              "
+            >
+              UP
+            </div>
+          </el-backtop>
         </el-main>
       </el-container>
     </el-container>
@@ -129,7 +144,7 @@ export default {
       console.log(to, from);
       // 应该在路由发生变化的时候重新获取面包屑
       this.getRouterBran();
-      // ?可以解决刷新的时候的导航选择状态的问题，但是路由切换的问题仍未解决
+      // ?可以解决刷新的时候的导航选择状态的问题，但是路由切换却无法设定导航选择状态
       localStorage.setItem(
         "activeMenu",
         JSON.stringify({
