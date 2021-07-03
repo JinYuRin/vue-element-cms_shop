@@ -50,11 +50,12 @@
           </el-menu>
         </div>
       </el-header>
-      <el-container style="height: 100%; padding-bottom: 60px">
+      <el-container style="height: 100%">
         <!-- 这个el-container的高度本来已经是父元素的百分百了，但是由于还存在另一个60px
              导致这个元素还有60px在底下隐藏了看不到，所以加上padding-bottom: 60px -->
-        <el-aside width="200px">
+        <el-aside width="200px" style="height: 100%">
           <el-menu
+            style="height: 100%"
             :default-active="activeAside.toString()"
             @select="selectAsideMenus"
           >
@@ -64,13 +65,29 @@
               :index="index.toString()"
             >
               <i class="el-icon-menu"></i>
-              <span slot="title">{{ menu }}</span>
+              <span slot="title">{{ menu.title }}</span>
             </el-menu-item>
           </el-menu>
           <!-- 高度太高，而且已经使用了hidden，所以隐藏看不到 -->
           <!-- <li v-for="i in 100" :key="i">{{ i }}</li> -->
         </el-aside>
         <el-main>
+          <!-- 考虑使用面包屑还是使用tabs标签 -->
+          <div
+            v-if="$route.name !== 'index'"
+            class="border-bottom p-3 mb-2"
+            style="margin: -20px"
+          >
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+              <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+              <el-breadcrumb-item
+                v-for="(bran, index) in routerBran"
+                :key="index"
+                :to="{ path: bran.path }"
+                >{{ bran.title }}</el-breadcrumb-item
+              >
+            </el-breadcrumb>
+          </div>
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -83,6 +100,10 @@ export default {
   created() {
     // 初始化一下Menus
     this.Menus = this.$config.Menus;
+    // 在created得到routerBran，但是还需要另一个时机:变换路由
+    this.getRouterBran();
+    // 从缓存中获取记录的导航激活信息
+    this.getActiveMenu();
   },
   // 引入一个vue混入组件，可以查文档
   // mixins:[],
@@ -97,16 +118,39 @@ export default {
           { title: "退出", index: "100-2" },
         ],
       },
+      routerBran: [],
     };
   },
 
   components: {},
 
+  watch: {
+    $route(to, from) {
+      console.log(to, from);
+      // 应该在路由发生变化的时候重新获取面包屑
+      this.getRouterBran();
+      // ?可以解决刷新的时候的导航选择状态的问题，但是路由切换的问题仍未解决
+      localStorage.setItem(
+        "activeMenu",
+        JSON.stringify({
+          top: this.activeHeader,
+          left: this.activeAside,
+        })
+      );
+    },
+  },
+
   computed: {
     // 利用计算属性解决层级过多的问题
-    activeHeader() {
+    activeHeader: {
       // 获取activeHeader
-      return this.Menus.activeHeader;
+      get() {
+        return this.Menus.activeHeader;
+      },
+      // set进一个值然后丢给activeHeader
+      set(val) {
+        this.Menus.activeHeader = val;
+      },
     },
     // 同时使用getset
     // 计算属性之间不能直接用this使用啊
@@ -129,13 +173,51 @@ export default {
   // mounted: {},
 
   methods: {
+    // 获取导航选择状态
+    getActiveMenu() {
+      let activeMenu = JSON.parse(localStorage.getItem("activeMenu"));
+      console.log(activeMenu);
+      if (activeMenu) {
+        this.activeHeader = activeMenu.top;
+        this.activeAside = activeMenu.left;
+      }
+    },
+    // 获取面包屑导航，那就先根据当前路由获取，那就必须先配置每个导航的路由了吧
+    getRouterBran() {
+      let routerBran = [];
+      // 这个应该是得到当前路由层级所含的路由及其子路由
+      let b = this.$route.matched.filter((v) => v.name);
+      // filter函数能过滤掉一些内容然后返回去
+      // console.log(b);
+      b.forEach((v) => {
+        if (v.name === "index" || v.name === "layout") {
+          return;
+        }
+        routerBran.push({ name: v.name, path: v.path, title: v.meta.title });
+      });
+      // console.log(routerBran);
+      this.routerBran = routerBran;
+    },
+    // 选中顶部导航的逻辑
     selectHeaderMenus(key, keyPath) {
       console.log(key, keyPath);
       this.$config.Menus.activeHeader = key;
+      // *默认进入该asideMenus下的activeAside路由
+      if (this.$route.name !== this.asideMenus[this.activeAside].name) {
+        this.$router.push({ name: this.asideMenus[this.activeAside].name });
+      }
     },
+    // 选中左侧导航的逻辑
     selectAsideMenus(key, keyPath) {
       console.log(key, keyPath);
       this.activeAside = key;
+      // console.log(this.asideMenus[this.activeAside].name);
+      // console.log(this.$route.name);
+      // console.log(this.asideMenus[this.activeAside].title);
+      if (this.$route.name !== this.asideMenus[this.activeAside].name) {
+        // *进入所选中的activeAside路由
+        this.$router.push({ name: this.asideMenus[this.activeAside].name });
+      }
     },
   },
 };

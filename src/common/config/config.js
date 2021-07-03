@@ -2,7 +2,7 @@
  * @Author: JinYuRin 
  * @Date: 2021-07-01 21:03:56 
  * @Last Modified by: JinYuRin
- * @Last Modified time: 2021-07-01 21:09:45
+ * @Last Modified time: 2021-07-02 21:19:48
  */
 export default {
     logo: 'UNI-ADMIN',
@@ -13,41 +13,81 @@ export default {
         headerMenus: [{
                 activeAside: 0,
                 name: "首页",
-                asideMenus: ["后台首页", "相册管理"],
+                asideMenus: [{
+                    title: "后台首页",
+                    name: 'index'
+                }, {
+                    title: "相册管理",
+                    name: 'shop_goods_list'
+                }],
             },
             {
                 activeAside: 0,
                 name: "商品",
-                asideMenus: [
-                    "商品列表",
-                    "分类列表",
-                    "商品规格",
-                    "商品类型",
-                    "商品评论",
-                    "优惠券管理",
-                ],
+                asideMenus: [{
+                    title: "商品列表",
+                    name: 'shop_goods_list'
+                }, {
+                    title: "分类列表",
+                    name: 'shop_goods_list'
+                }, {
+                    title: "商品规格",
+                    name: 'shop_goods_list'
+                }, {
+                    title: "商品类型",
+                    name: 'shop_goods_list'
+                }, {
+                    title: "商品评论",
+                    name: 'shop_goods_list'
+                }, {
+                    title: "优惠券管理",
+                    name: 'shop_goods_list'
+                }],
             },
             {
                 activeAside: 0,
                 name: "订单",
-                asideMenus: ["订单管理", "发票管理"],
+                asideMenus: [{
+                    title: "订单管理",
+                    name: 'shop_goods_list'
+                }, {
+                    title: "发票管理",
+                    name: 'shop_goods_list'
+                }],
             },
             {
                 activeAside: 0,
                 name: "会员",
-                asideMenus: ["会员列表", "会员等级"],
+                asideMenus: [{
+                    title: "会员列表",
+                    name: 'shop_goods_list'
+                }, {
+                    title: "会员等级",
+                    name: 'shop_goods_list'
+                }],
             },
             {
                 activeAside: 0,
                 name: "设置",
-                asideMenus: [
-                    "基础设置",
-                    "物流设置",
-                    "管理员管理",
-                    "交易设置",
-                    "公告管理",
-                    "app首页设置",
-                ],
+                asideMenus: [{
+                    title: "基础设置",
+                    name: 'shop_goods_list'
+                }, {
+                    title: "物流设置",
+                    name: 'shop_goods_list'
+                }, {
+                    title: "管理员管理",
+                    name: 'shop_goods_list'
+                }, {
+                    title: "交易设置",
+                    name: 'shop_goods_list'
+                }, {
+                    title: "公告管理",
+                    name: 'shop_goods_list'
+                }, {
+                    title: "app首页设置",
+                    name: 'shop_goods_list'
+                }],
             },
         ],
     },
