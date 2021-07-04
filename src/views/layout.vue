@@ -141,10 +141,11 @@ export default {
 
   watch: {
     $route(to, from) {
-      console.log(to, from);
+      console.log(to, from, this.$route.matched);
       // 应该在路由发生变化的时候重新获取面包屑
       this.getRouterBran();
-      // ?可以解决刷新的时候的导航选择状态的问题，但是路由切换却无法设定导航选择状态
+      // !可以解决刷新的时候的导航选择状态的问题，但是路由切换却无法设定导航选择状态
+      // !问题的关键是，如何通过路由状态找到对应的导航
       localStorage.setItem(
         "activeMenu",
         JSON.stringify({
