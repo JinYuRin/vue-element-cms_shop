@@ -21,33 +21,66 @@
             <div>
               <h4 class="mb-1">{{ i.num }}</h4>
               <!-- 使用small和h4之类的原生标签 -->
-              <small class="text-muted">{{ i.desc }}</small>
+              <small class="text-muted text-truncate">{{ i.desc }}</small>
             </div>
           </div>
         </el-card>
       </el-col>
     </el-row>
-    <el-row :gutter="20" class="mt-3" style="height: 500px;">
-      <el-col :span="12">
-        <el-row v-for="i in 2" :gutter="20" class="mb-3">
-          <el-col :span="24">
-            <el-card class="box-card">
-              <div slot="header" class="d-flex">
-                <span class="mr-auto">店铺及商品提示</span>
-                <small>您需要关心的店铺信息以及待处理事项</small>
-              </div>
-              <div id="" style="width: 100%; height: 140px"></div>
-            </el-card>
-          </el-col>
-        </el-row>
+    <el-row :gutter="20" class="mt-3">
+      <el-col
+        :span="12"
+        class="d-flex flex-column justify-content-between"
+        style="height: 360px"
+      >
+        <el-card
+          v-for="(board, index) in boards"
+          :key="index"
+          class="box-card"
+          shadow="never"
+        >
+          <div slot="header" class="d-flex">
+            <span class="mr-auto">{{ board.title }}</span>
+            <el-button style="padding: 3px 0" type="text">{{
+              board.tip
+            }}</el-button>
+          </div>
+          <div class="row">
+            <!-- bs中，一行12列 -->
+            <div
+              v-for="(button, index) in board.buttons"
+              :key="index"
+              :class="`col-${12 / board.buttons.length}`"
+            >
+              <!-- 晕死，还是用了原生按钮 -->
+              <button class="btn btn-light w-100">
+                <div
+                  class="
+                    d-flex
+                    flex-column
+                    justify-content-center
+                    align-items-center
+                  "
+                >
+                  <h4>{{ button.num }}</h4>
+                  <small class="text-muted">{{ button.desc }}</small>
+                </div>
+              </button>
+            </div>
+          </div>
+          <!-- 可能el-row内不能使用重复嵌套el-row吗，那就使用bootstrap -->
+          <!-- <el-row :gutter="20">
+            <el-col>1</el-col>
+          </el-row> -->
+        </el-card>
       </el-col>
-      <el-col :span="12">
-        <el-card class="box-card">
+      <el-col :span="12" style="height: 360px">
+        <el-card class="box-card" style="height: 100%">
           <div slot="header" class="d-flex">
             <span class="mr-auto">订单总数统计</span>
             <small>订单数量</small>
           </div>
-          <div id="main" style="width: 100%; height: 400px"></div>
+          <div id="main" style="width: 100%; height: 270px"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -61,6 +94,30 @@ export default {
   created() {},
   data() {
     return {
+      boards: [
+        {
+          title: "店铺及商品提示",
+          tip: "需要关注的店铺信息及待处理事项",
+          buttons: [
+            { num: 64, desc: "出售中" },
+            { num: 10, desc: "待回复" },
+            { num: 0, desc: "库存预警" },
+            { num: 3, desc: "仓库中" },
+          ],
+        },
+        {
+          title: "交易提示",
+          tip: "需要立即处理的交易订单",
+          buttons: [
+            { num: 0, desc: "待付款" },
+            { num: 10, desc: "待发货" },
+            { num: 0, desc: "已发货" },
+            { num: 3, desc: "已收货" },
+            { num: 3, desc: "退款中" },
+            { num: 3, desc: "待售后" },
+          ],
+        },
+      ],
       counts: [
         {
           icon: "el-icon-user-solid",
