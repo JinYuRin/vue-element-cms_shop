@@ -1,8 +1,14 @@
-<!--  -->
+/*
+ * @Author: JinYuRin 
+ * @Date: 2021-07-09 22:12:04 
+ * @Last Modified by: JinYuRin
+ * @Last Modified time: 2021-07-09 22:17:33
+ */
 <template>
+  <!-- bs自带的p-3的标准是rem -->
   <!-- <div>后台首页</div> -->
   <div>
-    <!-- 数据统计 利用栅格系统 -->
+    <!-- 上层的数据统计 利用栅格系统 -->
     <el-row :gutter="20">
       <el-col v-for="(i, index) in counts" :key="index" :span="6">
         <el-card shadow="hover">
@@ -27,7 +33,9 @@
         </el-card>
       </el-col>
     </el-row>
+    <!-- 中间层，右边是统计图 -->
     <el-row :gutter="20" class="mt-3">
+      <!--中间层左侧的col  -->
       <el-col
         :span="12"
         class="d-flex flex-column justify-content-between"
@@ -74,6 +82,7 @@
           </el-row> -->
         </el-card>
       </el-col>
+      <!--中间层右侧的col(统计图)  -->
       <el-col :span="12" style="height: 360px">
         <el-card class="box-card" style="height: 100%">
           <div slot="header" class="d-flex">
@@ -81,6 +90,70 @@
             <small>订单数量</small>
           </div>
           <div id="main" style="width: 100%; height: 270px"></div>
+        </el-card>
+      </el-col>
+    </el-row>
+    <!--下层的数据统计  -->
+    <el-row :gutter="20" class="mt-3">
+      <!-- 下层左侧的数据 -->
+      <el-col :span="12" style="height: 360px">
+        <el-card class="box-card" shadow="never">
+          <div slot="header" class="d-flex">
+            <span class="mr-auto">销售情况统计</span>
+            <el-button style="padding: 3px 0" type="text"
+              >按周期统计商家店铺的订单量和订单金额</el-button
+            >
+          </div>
+          <div class="px-2">
+            <div class="row mb-3">
+              <div class="media align-items-center border w-100">
+                <span class="border-right py-4 px-3 bg-light">昨日销量</span>
+                <div class="media-body">
+                  <div class="border-bottom p-2">
+                    <span>订单金额(元)</span>12
+                  </div>
+                  <div class="p-2"><span>订单量(件)</span>12</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="media align-items-center border w-100">
+                <span class="border-right py-4 px-3 bg-light">本月销量</span>
+                <div class="media-body">
+                  <div class="border-bottom p-2"><span>订单量(件)</span>12</div>
+                  <div class="p-2"><span>订单量(件)</span>12</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 可能el-row内不能使用重复嵌套el-row吗，那就使用bootstrap -->
+          <!-- <el-row :gutter="20">
+            <el-col>1</el-col>
+          </el-row> -->
+        </el-card>
+      </el-col>
+      <!-- 下层右侧的数据 -->
+      <el-col :span="12" style="height: 360px">
+        <el-card class="box-card" shadow="never">
+          <div slot="header" class="d-flex">
+            <span class="mr-auto">单品销售排名</span>
+            <el-button style="padding: 3px 0" type="text"
+              >按周期统计商家店铺的订单量和订单金额</el-button
+            >
+          </div>
+          <div class="row">
+            <el-table :data="tableData" height="180" border style="width: 100%">
+              <el-table-column prop="index" label="#" width="50">
+              </el-table-column>
+              <el-table-column prop="sku" label="商品信息"> </el-table-column>
+              <el-table-column prop="sales" label="销量" width="50">
+              </el-table-column>
+            </el-table>
+          </div>
+          <!-- 可能el-row内不能使用重复嵌套el-row吗，那就使用bootstrap -->
+          <!-- <el-row :gutter="20">
+            <el-col>1</el-col>
+          </el-row> -->
         </el-card>
       </el-col>
     </el-row>
@@ -94,6 +167,43 @@ export default {
   created() {},
   data() {
     return {
+      tableData: [
+        {
+          index: "1",
+          sku: "小天鹅（LittleSwan）滚筒洗衣机...",
+          sales: 9,
+        },
+        {
+          index: "1",
+          sku: "小天鹅（LittleSwan）滚筒洗衣机...",
+          sales: 9,
+        },
+        {
+          index: "1",
+          sku: "小天鹅（LittleSwan）滚筒洗衣机...",
+          sales: 9,
+        },
+        {
+          index: "1",
+          sku: "小天鹅（LittleSwan）滚筒洗衣机...",
+          sales: 9,
+        },
+        {
+          index: "1",
+          sku: "小天鹅（LittleSwan）滚筒洗衣机...",
+          sales: 9,
+        },
+        {
+          index: "1",
+          sku: "小天鹅（LittleSwan）滚筒洗衣机...",
+          sales: 9,
+        },
+        {
+          index: "1",
+          sku: "小天鹅（LittleSwan）滚筒洗衣机...",
+          sales: 9,
+        },
+      ],
       boards: [
         {
           title: "店铺及商品提示",
