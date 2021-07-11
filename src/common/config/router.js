@@ -27,6 +27,11 @@ let routes = [{
             // component: () => import("../../views/index/index.vue")
             component: () => "index/index"
         }, {
+            meta: {
+                title: '相册管理',
+            },
+            component: () => "album/index"
+        }, {
             // path: '/shop/goods/list',
             // name: 'shop_goods_list',
             meta: {

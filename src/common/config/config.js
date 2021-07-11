@@ -2,7 +2,7 @@
  * @Author: JinYuRin 
  * @Date: 2021-07-01 21:03:56 
  * @Last Modified by: JinYuRin
- * @Last Modified time: 2021-07-02 21:19:48
+ * @Last Modified time: 2021-07-10 21:36:50
  */
 export default {
     logo: 'UNI-ADMIN',
@@ -18,7 +18,7 @@ export default {
                     name: 'index'
                 }, {
                     title: "相册管理",
-                    name: 'shop_goods_list'
+                    name: 'album'
                 }],
             },
             {

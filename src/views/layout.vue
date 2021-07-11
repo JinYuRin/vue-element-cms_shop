@@ -71,7 +71,8 @@
           <!-- 高度太高，而且已经使用了hidden，所以隐藏看不到 -->
           <!-- <li v-for="i in 100" :key="i">{{ i }}</li> -->
         </el-aside>
-        <el-main class="bg-light">
+        <el-main class="bg-light" style="position: relative">
+          <!--  style="position: relative" -->
           <!-- 考虑使用面包屑还是使用tabs标签 -->
           <div
             v-if="$route.name !== 'index'"
