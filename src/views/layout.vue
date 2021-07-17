@@ -31,6 +31,9 @@
               :index="index.toString()"
               >{{ menu.name }}</el-menu-item
             >
+            <!--除了这个个人信息之外，index都是实际存在的，也就是说，当需要判断index=100
+            的时候，就是点到了个人信息的时候，回调函数需要特制
+              -->
             <el-submenu index="100">
               <template slot="title">
                 <el-avatar class="mr-1" :size="30" src="https://empty">
@@ -218,6 +221,11 @@ export default {
     // 选中顶部导航的逻辑
     selectHeaderMenus(key, keyPath) {
       console.log(key, keyPath);
+      // console.log(key.startsWith("100"));
+      // 当点击个人信息时候需要额外处理
+      if (keyPath[0] === "100") {
+        return console.log("正在点击个人信息");
+      }
       this.$config.Menus.activeHeader = key;
       // *默认进入该asideMenus下的activeAside路由
       if (this.$route.name !== this.asideMenus[this.activeAside].name) {
