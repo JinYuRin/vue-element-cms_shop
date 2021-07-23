@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- 记住了，如何让一个元素快速铺满父元素的界面，可以position -->
+    <!-- 记住了，如何让一个元素快速铺满父元素的界面，可以position realvtive -->
     <el-container
       style="position: absolute; left: 0; right: 0; top: 46.86px; bottom: 0"
     >
@@ -67,50 +67,13 @@
           style="position: absolute; left: 0; top: 60px; bottom: 60px"
           width="200px"
         >
-          <div>
-            <div class="list-group">
-              <!-- 暂时采用内联方法来激活他的被选中状态 由于不是element组件-js逻辑需要自定义 -->
-              <!-- cursor: pointer可以直接变成手型光标 -->
-              <button
-                @click="changeFolder(index)"
-                v-for="(i, index) in asideList"
-                :key="index"
-                :style="
-                  currentFolder === index
-                    ? 'background-color: #f0f9eb !important;border-color: #c2e7b0 !important;color: #67c23a !important;'
-                    : ''
-                "
-                type="button"
-                class="
-                  list-group-item list-group-item-action
-                  d-flex
-                  align-items-center
-                  justify-content-between
-                "
-                aria-current="true"
-              >
-                <div>{{ i }}</div>
-                <el-dropdown>
-                  <!-- <span class="btn btn-light btn-sm border">
-                    bs直接把某块元素设置成了btn
-                     -->
-                  <span class="btn btn-light btn-sm border">
-                    1<i class="el-icon-arrow-down el-icon--right"></i>
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item
-                      @click.stop.native="createOrUpdateAlbum(index)"
-                      >修改</el-dropdown-item
-                    >
-                    <!--@click.stop.native 该自定义组件不存在@click事件，所以需要使用原生事件且阻止冒泡-->
-                    <el-dropdown-item @click.stop.native="delAlbum(index)"
-                      >删除</el-dropdown-item
-                    >
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </button>
-            </div>
-          </div>
+          <album-list
+            :currentFolder="currentFolder"
+            :albumList="asideList"
+            @changeFolder="changeFolder"
+            @updateAlbum="createOrUpdateAlbum"
+            @delAlbum="delAlbum"
+          ></album-list>
         </el-aside>
         <el-container>
           <el-main
@@ -151,7 +114,9 @@
 </template>
 
 <script>
+import albumList from "../../components/album-list";
 export default {
+  components: { albumList },
   methods: {
     // 切换相册
     changeFolder(index) {
@@ -159,7 +124,7 @@ export default {
     },
     // 统一一个创建或编辑接口
     createOrUpdateAlbum(index) {
-      // tmd 数字0被认为是false
+      // ?tmd 数字0被认为是false
       console.log(index);
       typeof index === "number" ? this.updateAlbum(index) : this.createAlbum();
     },
@@ -176,7 +141,7 @@ export default {
       this.dialogFormVisible = true;
       this.editingFolder = index;
       // console.log("当前相册是", this.editingFolder);
-      this.form.name = this.asideList[this.editingFolder];
+      this.form.name = this.asideList[this.editingFolder].title;
     },
     // 提交相册的修改
     submitChange() {
@@ -184,7 +149,8 @@ export default {
         case "编辑相册":
           this.dialogFormVisible = false;
           // console.log(this.form.name);
-          this.asideList[this.editingFolder] = this.form.name;
+          this.asideList[this.editingFolder].title = this.form.name;
+          console.log(this.asideList);
           this.$message({
             type: "warning",
             message: `已将该相册名改为${this.form.name}`,
@@ -193,7 +159,10 @@ export default {
         case "创建相册":
           this.dialogFormVisible = false;
           // console.log("正在创建相册");
-          this.asideList.push(this.form.name);
+          this.asideList.push({
+            title: this.form.name,
+            id: this.asideList[this.asideList.length],
+          });
           this.$message({
             type: "success",
             message: `已创建名为${this.form.name}的相册`,
@@ -264,7 +233,11 @@ export default {
       // 输入相册名字搜索
       input: "",
       // 相册列表
-      asideList: ["瑾瑜林", "林瑾瑜", "金鳞鱼"],
+      asideList: [
+        { title: "瑾瑜林", id: 0 },
+        { title: "林瑾瑜", id: 1 },
+        { title: "金鳞鱼", id: 2 },
+      ],
       // 当前相册
       currentFolder: 0,
       // 正在修改或者删除的相册
