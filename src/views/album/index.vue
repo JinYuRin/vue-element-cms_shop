@@ -40,26 +40,11 @@
             <el-button type="success" size="mini" @click="createOrUpdateAlbum"
               >创建相册</el-button
             >
-            <el-button type="warning" size="mini">上传图片</el-button></el-col
+            <el-button type="warning" size="mini" @click="uploadPhoto"
+              >上传图片</el-button
+            ></el-col
           >
         </el-row>
-        <!-- <div class="d-flex">
-          <el-select v-model="value" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-          <el-input v-model="input" placeholder="输入图片名称"></el-input>
-          <el-button type="success" size="small">搜索</el-button>
-        </div>
-        <div class="d-flex">
-          <el-button type="success">创建相册</el-button>
-          <el-button type="warning">上传图片</el-button>
-        </div> -->
       </el-header>
       <el-container>
         <el-aside
@@ -73,7 +58,7 @@
             @changeFolder="changeFolder"
             @updateAlbum="createOrUpdateAlbum"
             @delAlbum="delAlbum"
-          ></album-list>
+          />
         </el-aside>
         <el-container>
           <el-main
@@ -91,33 +76,36 @@
       </el-container>
       <el-footer>Footer</el-footer>
     </el-container>
-    <!--el-dialog并不限定父元素，会自动地定位  -->
-    <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
-      <el-form :model="form" label-position="right" label-width="80px">
-        <el-form-item label="相册名称">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="相册排序" label-width="80px">
-          <el-input-number
-            size="medium"
-            v-model="form.count"
-            label="描述文字"
-          ></el-input-number>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitChange">确 定</el-button>
-      </div>
-    </el-dialog>
+    <!-- 编辑相册Or新增模态框组件 -->
+    <album-dialog
+      :dialogTitle="dialogTitle"
+      :dialogFormVisible="dialogFormVisible"
+      :form="form"
+      @onClose="dialogFormVisible = false"
+      @onCancel="dialogFormVisible = false"
+      @onComfirm="submitChange"
+    />
+    <!-- 图片上传模态框组件 -->
+    <album-upload-dialog
+      dialogTitle="上传图片"
+      :dialogUploadVisible="dialogUploadVisible"
+      @onClose="dialogUploadVisible = false"
+    ></album-upload-dialog>
   </div>
 </template>
 
 <script>
 import albumList from "../../components/album-list";
+import albumDialog from "../../components/album-dialog.vue";
+import albumUploadDialog from "../../components/album-upload-dialog.vue";
 export default {
-  components: { albumList },
+  components: { albumList, albumDialog, albumUploadDialog },
   methods: {
+    // 打开相片上传的模态框
+    uploadPhoto() {
+      console.log(`正在对${this.asideList[this.currentFolder].title}上传图片`);
+      this.dialogUploadVisible = true;
+    },
     // 切换相册
     changeFolder(index) {
       this.currentFolder = index;
@@ -195,6 +183,8 @@ export default {
   },
   data() {
     return {
+      // 展示上传相片的模态框
+      dialogUploadVisible: false,
       // 模态框标题
       dialogTitle: "",
       // 展示编辑相册的模态框

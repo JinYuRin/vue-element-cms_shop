@@ -8,11 +8,7 @@
         @click="$emit('changeFolder', index)"
         v-for="(i, index) in albumList"
         :key="i.id"
-        :style="
-          currentFolder === index
-            ? 'background-color: #f0f9eb !important;border-color: #c2e7b0 !important;color: #67c23a !important;'
-            : ''
-        "
+        :class="{ selectedFolder: currentFolder === index }"
         type="button"
         class="
           list-group-item list-group-item-action
@@ -52,5 +48,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+/* 选中相册的样式 */
+.selectedFolder {
+  background-color: #f0f9eb !important;
+  border-color: #c2e7b0 !important;
+  color: #67c23a !important;
+}
 </style>
