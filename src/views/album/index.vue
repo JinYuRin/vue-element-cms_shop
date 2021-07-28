@@ -70,7 +70,53 @@
               bottom: 60px;
             "
           >
-            <div style="height: 1000px"></div>
+            <!-- 总共24，span是默认，lg是大屏，md中屏,当他总数超过了24的时候就会换行了 -->
+            <el-row :gutter="15">
+              <el-col
+                v-for="img in asideList[currentFolder].imgList"
+                :key="img.id"
+                class="mb-4"
+                :span="24"
+                :xs="8"
+                :sm="6"
+                :md="6"
+                :lg="4"
+                :xl="4"
+              >
+                <el-card body-style="padding:0 0" shadow="hover">
+                  <div class="position-relative">
+                    <el-image
+                      style="width: auto; height: 100px"
+                      :src="img.src"
+                      :preview-src-list="[img.src]"
+                    >
+                    </el-image>
+                    <div
+                      class="w-100 text-center text-white position-absolute"
+                      style="background-color: rgba(0, 0, 0, 0.2); bottom: 5px"
+                    >
+                      {{ img.title }}
+                    </div>
+                  </div>
+                  <div
+                    class="d-flex justify-content-center align-items-center p-2"
+                  >
+                    <el-button
+                      size="mini"
+                      icon="el-icon-edit"
+                      plain
+                      @click="ediImg(img.id)"
+                    ></el-button>
+                    <el-button
+                      size="mini"
+                      icon="el-icon-delete"
+                      plain
+                      @click="delImg(img.id)"
+                    ></el-button>
+                  </div>
+                </el-card>
+              </el-col>
+            </el-row>
           </el-main>
         </el-container>
       </el-container>
@@ -101,6 +147,35 @@ import albumUploadDialog from "../../components/album-upload-dialog.vue";
 export default {
   components: { albumList, albumDialog, albumUploadDialog },
   methods: {
+    // 编辑相片操作
+    ediImg(id) {
+      this.$prompt("请输入新名称", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+        // inputErrorMessage: '邮箱格式不正确'
+      })
+        .then(({ value }) => {
+          // find可以直接找到元素引用的地址
+          let img = this.imgList.find((img) => img.id === id);
+          img.title = value;
+          this.$message({
+            type: "success",
+            message: "该相片已改名为: " + value,
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "放弃修改",
+          });
+        });
+    },
+    // 删除相片操作
+    delImg(id) {
+      let index = this.imgList.findIndex((img) => img.id === id);
+      this.imgList.splice(index, 1);
+    },
     // 打开相片上传的模态框
     uploadPhoto() {
       console.log(`正在对${this.asideList[this.currentFolder].title}上传图片`);
@@ -224,9 +299,119 @@ export default {
       input: "",
       // 相册列表
       asideList: [
-        { title: "瑾瑜林", id: 0 },
-        { title: "林瑾瑜", id: 1 },
-        { title: "金鳞鱼", id: 2 },
+        {
+          title: "瑾瑜林",
+          id: 0,
+          imgList: [
+            {
+              id: 0,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner2.jpg",
+            },
+            {
+              id: 1,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner1.jpg",
+            },
+            {
+              id: 2,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner3.jpg",
+            },
+          ],
+        },
+        {
+          title: "林瑾瑜",
+          id: 1,
+          imgList: [
+            {
+              id: 0,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner2.jpg",
+            },
+            {
+              id: 1,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner1.jpg",
+            },
+            {
+              id: 2,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner3.jpg",
+            },
+            {
+              id: 3,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner4.jpg",
+            },
+            {
+              id: 4,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner5.jpg",
+            },
+            {
+              id: 5,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner2.jpg",
+            },
+          ],
+        },
+        {
+          title: "金鳞鱼",
+          id: 2,
+          imgList: [
+            {
+              id: 0,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner2.jpg",
+            },
+            {
+              id: 1,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner1.jpg",
+            },
+            {
+              id: 2,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner3.jpg",
+            },
+            {
+              id: 3,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner4.jpg",
+            },
+            {
+              id: 4,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner5.jpg",
+            },
+            {
+              id: 5,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner2.jpg",
+            },
+            {
+              id: 6,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner1.jpg",
+            },
+            {
+              id: 7,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner3.jpg",
+            },
+            {
+              id: 8,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner4.jpg",
+            },
+            {
+              id: 9,
+              title: "女装大牌汇聚",
+              src: "http://lencent.top/public/wanxiang/home/banner5.jpg",
+            },
+          ],
+        },
       ],
       // 当前相册
       currentFolder: 0,

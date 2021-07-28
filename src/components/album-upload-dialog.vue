@@ -5,7 +5,7 @@
     :visible.sync="dialogUploadVisible"
     @close="$emit('onClose')"
   >
-    <!-- 为什么一个text-center就能将整个元素居中呢 -->
+    <!-- 为什么一个text-center就能将整个元素居中呢 这样吧在只有一个子元素和仅仅需要水平居中就可以用text-center -->
     <div class="text-center">
       <el-upload
         class="w-100"
