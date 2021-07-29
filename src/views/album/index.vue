@@ -61,62 +61,15 @@
           />
         </el-aside>
         <el-container>
-          <el-main
-            style="
-              position: absolute;
-              left: 200px;
-              right: 0;
-              top: 60px;
-              bottom: 60px;
-            "
+          <el-main style="position: absolute;left: 200px; right: 0;top: 60px;bottom: 60px;"
           >
-            <!-- 总共24，span是默认，lg是大屏，md中屏,当他总数超过了24的时候就会换行了 -->
-            <el-row :gutter="15">
-              <el-col
-                v-for="img in asideList[currentFolder].imgList"
-                :key="img.id"
-                class="mb-4"
-                :span="24"
-                :xs="8"
-                :sm="6"
-                :md="6"
-                :lg="4"
-                :xl="4"
-              >
-                <el-card body-style="padding:0 0" shadow="hover">
-                  <div class="position-relative">
-                    <el-image
-                      style="width: auto; height: 100px"
-                      :src="img.src"
-                      :preview-src-list="[img.src]"
-                    >
-                    </el-image>
-                    <div
-                      class="w-100 text-center text-white position-absolute"
-                      style="background-color: rgba(0, 0, 0, 0.2); bottom: 5px"
-                    >
-                      {{ img.title }}
-                    </div>
-                  </div>
-                  <div
-                    class="d-flex justify-content-center align-items-center p-2"
-                  >
-                    <el-button
-                      size="mini"
-                      icon="el-icon-edit"
-                      plain
-                      @click="ediImg(img.id)"
-                    ></el-button>
-                    <el-button
-                      size="mini"
-                      icon="el-icon-delete"
-                      plain
-                      @click="delImg(img.id)"
-                    ></el-button>
-                  </div>
-                </el-card>
-              </el-col>
-            </el-row>
+            <!-- 相片宫格组件 -->
+            <album-photo-grids
+              :asideList="asideList"
+              :currentFolder="currentFolder"
+              @ediImg="ediImg"
+              @delImg="delImg"
+            />
           </el-main>
         </el-container>
       </el-container>
@@ -136,16 +89,17 @@
       dialogTitle="上传图片"
       :dialogUploadVisible="dialogUploadVisible"
       @onClose="dialogUploadVisible = false"
-    ></album-upload-dialog>
+    />
   </div>
 </template>
 
 <script>
 import albumList from "../../components/album-list";
 import albumDialog from "../../components/album-dialog.vue";
+import albumPhotoGrids from "../../components/album-photo-grids.vue";
 import albumUploadDialog from "../../components/album-upload-dialog.vue";
 export default {
-  components: { albumList, albumDialog, albumUploadDialog },
+  components: { albumList, albumDialog, albumUploadDialog, albumPhotoGrids },
   methods: {
     // 编辑相片操作
     ediImg(id) {
@@ -157,7 +111,9 @@ export default {
       })
         .then(({ value }) => {
           // find可以直接找到元素引用的地址
-          let img = this.imgList.find((img) => img.id === id);
+          let img = this.asideList[this.currentFolder].imgList.find(
+            (img) => img.id === id
+          );
           img.title = value;
           this.$message({
             type: "success",
@@ -173,8 +129,28 @@ export default {
     },
     // 删除相片操作
     delImg(id) {
-      let index = this.imgList.findIndex((img) => img.id === id);
-      this.imgList.splice(index, 1);
+      console.log(id);
+      this.$confirm("此操作将删除该相片, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          let index = this.asideList[this.currentFolder].imgList.findIndex(
+            (img) => img.id === id
+          );
+          this.asideList[this.currentFolder].imgList.splice(index, 1);
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
     // 打开相片上传的模态框
     uploadPhoto() {
