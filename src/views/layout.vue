@@ -13,15 +13,15 @@
         overflow: hidden;
       "
     >
-      <el-header style="background-color: #545c64">
+      <el-header style="background-color: #409EFF">
         <div class="d-flex justify-content-between align-items-center">
           <!-- 因为$config.logo也是Vue对象里的属性，可以用this直接指向的 -->
-          <h3 class="text-white m-0">{{ $config.logo }}</h3>
+          <h3 class="text-white m-0" style="letter-spacing:3px">{{ $config.logo }}</h3>
           <el-menu
             :default-active="activeHeader.toString()"
             mode="horizontal"
             @select="selectHeaderMenus"
-            background-color="#545c64"
+            background-color="#409EFF"
             text-color="#fff"
             active-text-color="#ffd04b"
           >
