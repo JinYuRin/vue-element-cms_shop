@@ -32,21 +32,42 @@
             <el-button size="mini">高级搜索</el-button>
           </el-col>
         </el-row>
-        <el-table class="mt-3" :data="tableData" border style="width: 100%">
-          <el-table-column prop="date" label="商品" width="180">
+        <el-table
+          border
+          class="mt-3"
+          ref="multipleTable"
+          :data="tableData"
+          tooltip-effect="dark"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" width="55"> </el-table-column>
+          <el-table-column label="商品" width="350"> </el-table-column>
+          <el-table-column prop="name" label="实际销量" width="120">
           </el-table-column>
-          <el-table-column prop="name" label="实际销量" width="180">
-          </el-table-column
-          ><el-table-column prop="name" label="商品状态" width="180">
-          </el-table-column
-          ><el-table-column prop="name" label="审核状态" width="180">
-          </el-table-column
-          ><el-table-column prop="name" label="总库存" width="180">
-          </el-table-column
-          ><el-table-column prop="name" label="价格(元)" width="180">
+          <el-table-column
+            prop="address"
+            label="商品状态"
+            width="80"
+            show-overflow-tooltip
+          >
           </el-table-column>
-          <el-table-column prop="address" label="操作"> </el-table-column>
+
+          <el-table-column prop="name" label="审核状态" width="120">
+          </el-table-column
+          ><el-table-column prop="name" label="总库存" width="120">
+          </el-table-column
+          ><el-table-column prop="name" label="价格(元)" width="120">
+          </el-table-column
+          ><el-table-column prop="address" label="操作" show-overflow-tooltip>
+          </el-table-column>
         </el-table>
+        <div style="margin-top: 20px">
+          <el-button @click="toggleSelection([tableData[1], tableData[2]])"
+            >切换第二、第三行的选中状态</el-button
+          >
+          <el-button @click="toggleSelection()">取消选择</el-button>
+        </div>
       </el-main>
       <el-footer>Footer</el-footer>
     </el-container>
@@ -60,6 +81,11 @@ export default {
       activeName: "second",
       tableData: [
         {
+          date: "2016-05-03",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄",
+        },
+        {
           date: "2016-05-02",
           name: "王小虎",
           address: "上海市普陀区金沙江路 1518 弄",
@@ -67,19 +93,30 @@ export default {
         {
           date: "2016-05-04",
           name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
+          address: "上海市普陀区金沙江路 1518 弄",
         },
         {
           date: "2016-05-01",
           name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
+          address: "上海市普陀区金沙江路 1518 弄",
         },
         {
-          date: "2016-05-03",
+          date: "2016-05-08",
           name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
+          address: "上海市普陀区金沙江路 1518 弄",
+        },
+        {
+          date: "2016-05-06",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄",
+        },
+        {
+          date: "2016-05-07",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄",
         },
       ],
+      multipleSelection: [],
     };
   },
 
@@ -90,6 +127,18 @@ export default {
   methods: {
     handleClick(tab, event) {
       console.log(tab, event);
+    },
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach((row) => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
     },
   },
 };
